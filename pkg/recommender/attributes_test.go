@@ -39,7 +39,7 @@ func TestAttributeValues_SelectAttributeValues(t *testing.T) {
 			min:    6,
 			max:    6,
 			check: func(selected []float64, err error) {
-				assert.NotNil(t, selected, "")
+				assert.Nil(t, selected, "")
 				assert.Equal(t, 7.0, selected[0], "invalid selection")
 			},
 		},
