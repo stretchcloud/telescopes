@@ -110,5 +110,5 @@ ifndef GOLINT_CMD
 endif
 
 go-junit-report: install-go-junit-report
-	$(shell mkdir -p test-results)
+	$(shell mkdir -p test-results/recommender)
 	cat test.txt | go-junit-report > test-results/recommender/report.xml
