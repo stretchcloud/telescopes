@@ -111,4 +111,4 @@ endif
 
 go-junit-report: install-go-junit-report
 	$(shell mkdir -p test-results)
-	cat test.txt | go-junit-report > test-results/report.xml
+	cat test.txt | go-junit-report > test-results/recommender/report.xml
