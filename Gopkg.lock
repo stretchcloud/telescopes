@@ -37,11 +37,10 @@
   version = "0.2.26"
 
 [[projects]]
-  digest = "1:7180ffe19890acdd9b894b390450335d8a39d89b942a46c82c1a9b256c1e2f33"
+  digest = "1:df72bba3554dbe236b4a1d423c2ba13201dfcdb237e5ce99371db822a8ab42fc"
   name = "github.com/banzaicloud/cloudinfo"
   packages = [
     "pkg/cloudinfo-client/client",
-    "pkg/cloudinfo-client/client/attribute",
     "pkg/cloudinfo-client/client/images",
     "pkg/cloudinfo-client/client/products",
     "pkg/cloudinfo-client/client/provider",
@@ -54,7 +53,7 @@
     "pkg/cloudinfo-client/models",
   ]
   pruneopts = "NUT"
-  revision = "073895e77701946ed97c7d5a1fcfbdf1d7d53376"
+  revision = "a66045ddaa707b9adb3b209e4448890799178b9b"
 
 [[projects]]
   digest = "1:2893d610c2ac37c521e873e77b6c0e36f91d6f9fad81250a46a21fa3dd944b6f"
@@ -291,8 +290,8 @@
     "adapters/logrusadapter",
   ]
   pruneopts = "NUT"
-  revision = "72381de18a2f0fb8cd421a6316af719950ce3bef"
-  version = "v0.10.0"
+  revision = "4f5b4da9656e77984dc8d9c43bbb385430ef0e85"
+  version = "v0.11.0"
 
 [[projects]]
   digest = "1:4e771d1c6e15ca4516ad971c34205c822b5cff2747179679d7b321e4e1bfe431"
@@ -854,6 +853,7 @@
     "github.com/banzaicloud/cloudinfo/pkg/cloudinfo-client/client/products",
     "github.com/banzaicloud/cloudinfo/pkg/cloudinfo-client/client/provider",
     "github.com/banzaicloud/cloudinfo/pkg/cloudinfo-client/client/region",
+    "github.com/banzaicloud/cloudinfo/pkg/cloudinfo-client/client/regions",
     "github.com/banzaicloud/cloudinfo/pkg/cloudinfo-client/client/service",
     "github.com/banzaicloud/cloudinfo/pkg/cloudinfo-client/models",
     "github.com/banzaicloud/go-gin-prometheus",

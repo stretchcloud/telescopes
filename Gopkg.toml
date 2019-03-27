@@ -9,7 +9,7 @@
 
 [[constraint]]
   name = "github.com/banzaicloud/cloudinfo"
-  revision = "073895e77701946ed97c7d5a1fcfbdf1d7d53376"
+  revision = "a66045ddaa707b9adb3b209e4448890799178b9b"
 
 [[constraint]]
   name = "github.com/gin-contrib/cors"
@@ -53,7 +53,7 @@
 
 [[constraint]]
   name = "github.com/goph/logur"
-  version = "0.10.0"
+  version = "v0.11.0"
 
 [[constraint]]
   name = "github.com/gofrs/uuid"

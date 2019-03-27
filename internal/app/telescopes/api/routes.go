@@ -35,16 +35,14 @@ const (
 
 // RouteHandler struct that wraps the recommender engine
 type RouteHandler struct {
-	engine    recommender.ClusterRecommender
 	buildInfo buildinfo.BuildInfo
 	ciCli     *recommender.CloudInfoClient
 	log       logur.Logger
 }
 
 // NewRouteHandler creates a new RouteHandler and returns a reference to it
-func NewRouteHandler(e *recommender.Engine, info buildinfo.BuildInfo, ciCli *recommender.CloudInfoClient, log logur.Logger) *RouteHandler {
+func NewRouteHandler(info buildinfo.BuildInfo, ciCli *recommender.CloudInfoClient, log logur.Logger) *RouteHandler {
 	return &RouteHandler{
-		engine:    e,
 		buildInfo: info,
 		ciCli:     ciCli,
 		log:       log,
@@ -89,6 +87,7 @@ func (r *RouteHandler) ConfigureRoutes(router *gin.Engine) {
 
 	recGroup := v1.Group("/recommender")
 	{
+		recGroup.POST("/", r.recommendClustersSetup())
 		recGroup.POST("/:provider/:service/:region/cluster", r.recommendClusterSetup())
 		recGroup.PUT("/:provider/:service/:region/cluster", r.recommendClusterScaleOut())
 	}

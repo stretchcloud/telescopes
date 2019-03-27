@@ -68,6 +68,11 @@ type RecommendClusterSetupParams struct {
 
 	*/
 	AllowBurst *bool
+	/*AllowDiversify
+	  AllowDiversify allow diversification of virtual machines
+
+	*/
+	AllowDiversify *bool
 	/*AllowOlderGen
 	  AllowOlderGen allow older generations of virtual machines (applies for EC2 only)
 
@@ -112,6 +117,11 @@ type RecommendClusterSetupParams struct {
 	Provider string
 	/*Region*/
 	Region string
+	/*RespPerService
+	  Maximum number of response per service
+
+	*/
+	RespPerService *int64
 	/*SameSize
 	  If true, recommended instance types will have a similar size
 
@@ -187,6 +197,17 @@ func (o *RecommendClusterSetupParams) WithAllowBurst(allowBurst *bool) *Recommen
 // SetAllowBurst adds the allowBurst to the recommend cluster setup params
 func (o *RecommendClusterSetupParams) SetAllowBurst(allowBurst *bool) {
 	o.AllowBurst = allowBurst
+}
+
+// WithAllowDiversify adds the allowDiversify to the recommend cluster setup params
+func (o *RecommendClusterSetupParams) WithAllowDiversify(allowDiversify *bool) *RecommendClusterSetupParams {
+	o.SetAllowDiversify(allowDiversify)
+	return o
+}
+
+// SetAllowDiversify adds the allowDiversify to the recommend cluster setup params
+func (o *RecommendClusterSetupParams) SetAllowDiversify(allowDiversify *bool) {
+	o.AllowDiversify = allowDiversify
 }
 
 // WithAllowOlderGen adds the allowOlderGen to the recommend cluster setup params
@@ -299,6 +320,17 @@ func (o *RecommendClusterSetupParams) SetRegion(region string) {
 	o.Region = region
 }
 
+// WithRespPerService adds the respPerService to the recommend cluster setup params
+func (o *RecommendClusterSetupParams) WithRespPerService(respPerService *int64) *RecommendClusterSetupParams {
+	o.SetRespPerService(respPerService)
+	return o
+}
+
+// SetRespPerService adds the respPerService to the recommend cluster setup params
+func (o *RecommendClusterSetupParams) SetRespPerService(respPerService *int64) {
+	o.RespPerService = respPerService
+}
+
 // WithSameSize adds the sameSize to the recommend cluster setup params
 func (o *RecommendClusterSetupParams) WithSameSize(sameSize *bool) *RecommendClusterSetupParams {
 	o.SetSameSize(sameSize)
@@ -383,6 +415,22 @@ func (o *RecommendClusterSetupParams) WriteToRequest(r runtime.ClientRequest, re
 		qAllowBurst := swag.FormatBool(qrAllowBurst)
 		if qAllowBurst != "" {
 			if err := r.SetQueryParam("allowBurst", qAllowBurst); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if o.AllowDiversify != nil {
+
+		// query param allowDiversify
+		var qrAllowDiversify bool
+		if o.AllowDiversify != nil {
+			qrAllowDiversify = *o.AllowDiversify
+		}
+		qAllowDiversify := swag.FormatBool(qrAllowDiversify)
+		if qAllowDiversify != "" {
+			if err := r.SetQueryParam("allowDiversify", qAllowDiversify); err != nil {
 				return err
 			}
 		}
@@ -501,6 +549,22 @@ func (o *RecommendClusterSetupParams) WriteToRequest(r runtime.ClientRequest, re
 	// path param region
 	if err := r.SetPathParam("region", o.Region); err != nil {
 		return err
+	}
+
+	if o.RespPerService != nil {
+
+		// query param respPerService
+		var qrRespPerService int64
+		if o.RespPerService != nil {
+			qrRespPerService = *o.RespPerService
+		}
+		qRespPerService := swag.FormatInt64(qrRespPerService)
+		if qRespPerService != "" {
+			if err := r.SetQueryParam("respPerService", qRespPerService); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if o.SameSize != nil {

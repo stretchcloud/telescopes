@@ -18,6 +18,9 @@ type ClusterRecommendationReq struct {
 	// Are burst instances allowed in recommendation
 	AllowBurst bool `json:"allowBurst,omitempty"`
 
+	// AllowDiversify allow diversification of virtual machines
+	AllowDiversify bool `json:"allowDiversify,omitempty"`
+
 	// AllowOlderGen allow older generations of virtual machines (applies for EC2 only)
 	AllowOlderGen bool `json:"allowOlderGen,omitempty"`
 
@@ -41,6 +44,9 @@ type ClusterRecommendationReq struct {
 
 	// Percentage of regular (on-demand) nodes in the recommended cluster
 	OnDemandPct int64 `json:"onDemandPct,omitempty"`
+
+	// Maximum number of response per service
+	RespPerService int64 `json:"respPerService,omitempty"`
 
 	// If true, recommended instance types will have a similar size
 	SameSize bool `json:"sameSize,omitempty"`

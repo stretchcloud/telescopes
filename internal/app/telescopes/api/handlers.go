@@ -21,6 +21,7 @@ import (
 	"github.com/banzaicloud/telescopes/internal/platform/errorresponse"
 	"github.com/banzaicloud/telescopes/internal/platform/log"
 	"github.com/banzaicloud/telescopes/pkg/recommender"
+	"github.com/banzaicloud/telescopes/pkg/recommender/engine"
 	"github.com/gin-gonic/gin"
 	"github.com/goph/emperror"
 	"github.com/mitchellh/mapstructure"
@@ -69,8 +70,9 @@ func (r *RouteHandler) recommendClusterSetup() gin.HandlerFunc {
 				emperror.WrapWith(err, "failed to bind request body", classifier.ValidationErrTag))
 			return
 		}
+		engine := engine.NewEngine(r.ciCli, logger)
 
-		if response, err := r.engine.RecommendCluster(pathParams.Provider, pathParams.Service, pathParams.Region, req, nil, logger); err != nil {
+		if response, err := engine.RecommendCluster(pathParams.Provider, pathParams.Service, pathParams.Region, req, nil); err != nil {
 			errorresponse.NewErrorResponder(c).Respond(err)
 			return
 		} else {
@@ -121,13 +123,61 @@ func (r *RouteHandler) recommendClusterScaleOut() gin.HandlerFunc {
 				emperror.WrapWith(err, "failed to bind request body", classifier.ValidationErrTag))
 			return
 		}
+		engine := engine.NewEngine(r.ciCli, logger)
 
-		if response, err := r.engine.RecommendClusterScaleOut(pathParams.Provider, pathParams.Service, pathParams.Region, req, logger); err != nil {
+		if response, err := engine.RecommendClusterScaleOut(pathParams.Provider, pathParams.Service, pathParams.Region, req); err != nil {
 			errorresponse.NewErrorResponder(c).Respond(err)
 			return
 		} else {
 			c.JSON(http.StatusOK, RecommendationResponse{*response})
 		}
+	}
+}
+
+// swagger:route POST /recommender/ recommend recommendClustersSetup
+//
+// Provides a recommended set of node pools on a given provider in a specific region.
+//
+//     Consumes:
+//     - application/json
+//
+//     Produces:
+//     - application/json
+//
+//     Schemes: http
+//
+//     Security:
+//
+//     Responses:
+//       200: RecommendationResponse
+func (r *RouteHandler) recommendClustersSetup() gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		logger := log.WithFieldsForHandlers(c, r.log, map[string]interface{}{})
+
+		logger.Info("recommend cluster setup")
+
+		req := recommender.Request{}
+
+		if err := c.BindJSON(&req); err != nil {
+			logger.Error(emperror.Wrap(err, "failed to bind request body").Error())
+			c.JSON(http.StatusBadRequest, gin.H{
+				"code":    "bad_params",
+				"message": "validation failed",
+				"cause":   err.Error(),
+			})
+			return
+		}
+
+		engine := engine.NewEngine(r.ciCli, logger)
+
+		resp, err := engine.RecommendClusters(req)
+		if err != nil {
+			errorresponse.NewErrorResponder(c).Respond(err)
+			return
+		}
+
+		c.JSON(http.StatusOK, resp)
 	}
 }
 

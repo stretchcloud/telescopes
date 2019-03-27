@@ -19,6 +19,7 @@ import (
 	"github.com/banzaicloud/cloudinfo/pkg/cloudinfo-client/client/products"
 	"github.com/banzaicloud/cloudinfo/pkg/cloudinfo-client/client/provider"
 	"github.com/banzaicloud/cloudinfo/pkg/cloudinfo-client/client/region"
+	"github.com/banzaicloud/cloudinfo/pkg/cloudinfo-client/client/regions"
 	"github.com/banzaicloud/cloudinfo/pkg/cloudinfo-client/client/service"
 	"github.com/banzaicloud/cloudinfo/pkg/cloudinfo-client/models"
 	"github.com/go-openapi/runtime"
@@ -27,6 +28,9 @@ import (
 
 // CloudInfoSource declares operations for retrieving information required for the recommender engine
 type CloudInfoSource interface {
+	// GetRegions retrieves the regions
+	GetRegions(provider, service string) ([]*models.Continent, error)
+
 	// GetProductDetails retrieves the product details for the provider and region
 	GetProductDetails(provider string, service string, region string) ([]*models.ProductDetails, error)
 }
@@ -62,24 +66,24 @@ func (ciCli *CloudInfoClient) GetProductDetails(provider string, service string,
 func (ciCli *CloudInfoClient) GetProvider(prv string) (string, error) {
 	gpp := provider.NewGetProviderParams().WithProvider(prv)
 
-	provider, err := ciCli.Provider.GetProvider(gpp)
+	p, err := ciCli.Provider.GetProvider(gpp)
 	if err != nil {
 		return "", discriminateErrCtx(err)
 	}
 
-	return provider.Payload.Provider.Provider, nil
+	return p.Payload.Provider.Provider, nil
 }
 
 // GetService validates service
 func (ciCli *CloudInfoClient) GetService(prv string, svc string) (string, error) {
 	gsp := service.NewGetServiceParams().WithProvider(prv).WithService(svc)
 
-	service, err := ciCli.Service.GetService(gsp)
+	s, err := ciCli.Service.GetService(gsp)
 	if err != nil {
 		return "", discriminateErrCtx(err)
 	}
 
-	return service.Payload.Service.Service, nil
+	return s.Payload.Service.Service, nil
 }
 
 // GetRegion validates region
@@ -92,6 +96,18 @@ func (ciCli *CloudInfoClient) GetRegion(prv, svc, reg string) (string, error) {
 	}
 
 	return r.Payload.Name, nil
+}
+
+// GetRegions gets regions
+func (ciCli *CloudInfoClient) GetRegions(provider, service string) ([]*models.Continent, error) {
+	grp := regions.NewGetRegionsParams().WithProvider(provider).WithService(service)
+
+	r, err := ciCli.Regions.GetRegions(grp)
+	if err != nil {
+		return nil, discriminateErrCtx(err)
+	}
+
+	return r.Payload, nil
 }
 
 func discriminateErrCtx(err error) error {
